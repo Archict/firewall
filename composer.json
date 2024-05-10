@@ -1,10 +1,11 @@
 {
-    "name": "archict/brick-template",
-    "description": "Template for Bricks",
+    "name": "archict/firewall",
+    "description": "Control access to resources",
     "type": "archict-brick",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Archict\\BrickTemplate\\": "include/"
+            "Archict\\Firewall\\": "include/"
         }
     },
     "require": {
@@ -13,7 +14,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Archict\\BrickTemplate\\": "tests/unit"
+            "Archict\\Firewall\\": "tests/unit"
         }
     },
     "require-dev": {
