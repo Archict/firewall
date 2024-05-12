@@ -64,7 +64,7 @@ interface User
 This config tag must contain an array of rules.
 
 Each rule must have at least the `path` tag. This tag define the path to match, it can be a pattern with the same rules
-as in `Archict\router`.
+as in [`Archict\router`](https://github.com/Archict/router).
 
 Then you have the choice between let the firewall check if user can access the resource (the check is based on user
 roles), or implement your own checker.
@@ -97,7 +97,7 @@ interface UserAccessChecker
 ```
 
 This method returns `true` if user is authorized to see resource. It can throw an exception the same way as defined
-in `Archict\router`.
+in [`Archict\router`](https://github.com/Archict/router).
 
 Then you can provide the class name to your rule with the tag `checker`:
 
