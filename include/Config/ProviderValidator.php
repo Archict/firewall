@@ -27,24 +27,45 @@ declare(strict_types=1);
 
 namespace Archict\Firewall\Config;
 
-use Archict\Firewall\FirewallAccessChecker;
+use Archict\Firewall\Config\Exception\ClassMustImplementInterfaceException;
+use Archict\Firewall\Config\Exception\ClassNotFoundException;
+use Archict\Firewall\Config\Exception\EmptyProviderClassNameException;
+use Archict\Firewall\Config\Exception\EmptyProviderNameException;
+use Archict\Firewall\Config\Exception\FirewallException;
+use Archict\Firewall\UserProvider;
+use ReflectionClass;
 
 /**
  * @internal
  */
-final readonly class AccessControlRepresentation
+final class ProviderValidator
 {
     /**
-     * @param string[]|null $roles
-     * @param class-string $checker
+     * @param class-string $class_name
+     * @throws FirewallException
      */
-    public function __construct(
-        public string $path,
-        public ?string $provider = null,
-        public ?array $roles = null,
-        public ?int $error = null,
-        public ?string $redirect_to = null,
-        public string $checker = FirewallAccessChecker::class,
-    ) {
+    public function validate(string $name, string $class_name): void
+    {
+        $name       = trim($name);
+        $class_name = trim($class_name);
+
+        if (trim($name) === '') {
+            throw new EmptyProviderNameException();
+        }
+
+        if (trim($class_name) === '') {
+            throw new EmptyProviderClassNameException($name);
+        }
+
+        if (!class_exists($class_name)) {
+            throw new ClassNotFoundException($class_name);
+        }
+
+        $reflection = new ReflectionClass($class_name);
+        if (!$reflection->implementsInterface(UserProvider::class)) {
+            throw new ClassMustImplementInterfaceException($class_name, UserProvider::class);
+        }
+
+        // Provider is valid
     }
 }

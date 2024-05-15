@@ -25,26 +25,12 @@
 
 declare(strict_types=1);
 
-namespace Archict\Firewall\Config;
+namespace Archict\Firewall\Config\Exception;
 
-use Archict\Firewall\FirewallAccessChecker;
-
-/**
- * @internal
- */
-final readonly class AccessControlRepresentation
+final class ClassNotFoundException extends FirewallException
 {
-    /**
-     * @param string[]|null $roles
-     * @param class-string $checker
-     */
-    public function __construct(
-        public string $path,
-        public ?string $provider = null,
-        public ?array $roles = null,
-        public ?int $error = null,
-        public ?string $redirect_to = null,
-        public string $checker = FirewallAccessChecker::class,
-    ) {
+    public function __construct(string $class_name)
+    {
+        parent::__construct("'$class_name' is not an existing class");
     }
 }

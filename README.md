@@ -37,7 +37,7 @@ namespace Archict\Firewall;
 
 interface UserProvider 
 {
-    public function getCurrentUser(ServerRequestInterface $request): User;
+    public function getCurrentUser(ServerRequestInterface $request): UserWithRoles;
 }
 ```
 
@@ -50,7 +50,7 @@ The class you pass in the config must implement this interface.
 
 namespace Archict\Firewall;
 
-interface User
+interface UserWithRoles
 {
     /**
      * @return string[]
@@ -74,7 +74,7 @@ roles), or implement your own checker.
 If you choose to use firewall checker, then you must provide these 2 tags:
 
 - `provider` ➡ One of the previously defined provider
-- `roles` ➡ An array of string. User must have one these roles to access resource
+- `roles` ➡ An array of string. User must have one of these roles to access resource
 
 Then you can define the behavior with one these rules (only one):
 

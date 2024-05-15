@@ -25,26 +25,25 @@
 
 declare(strict_types=1);
 
-namespace Archict\Firewall\Config;
+namespace Archict\Firewall;
 
-use Archict\Firewall\FirewallAccessChecker;
-
-/**
- * @internal
- */
-final readonly class AccessControlRepresentation
+final readonly class UserWithRolesStub implements UserWithRoles
 {
     /**
-     * @param string[]|null $roles
-     * @param class-string $checker
+     * @param string[] $roles
      */
-    public function __construct(
-        public string $path,
-        public ?string $provider = null,
-        public ?array $roles = null,
-        public ?int $error = null,
-        public ?string $redirect_to = null,
-        public string $checker = FirewallAccessChecker::class,
+    private function __construct(
+        private array $roles,
     ) {
+    }
+
+    public static function buildWithRoles(string ...$roles): self
+    {
+        return new self($roles);
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
     }
 }

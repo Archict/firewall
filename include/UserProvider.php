@@ -25,26 +25,11 @@
 
 declare(strict_types=1);
 
-namespace Archict\Firewall\Config;
+namespace Archict\Firewall;
 
-use Archict\Firewall\FirewallAccessChecker;
+use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * @internal
- */
-final readonly class AccessControlRepresentation
+interface UserProvider
 {
-    /**
-     * @param string[]|null $roles
-     * @param class-string $checker
-     */
-    public function __construct(
-        public string $path,
-        public ?string $provider = null,
-        public ?array $roles = null,
-        public ?int $error = null,
-        public ?string $redirect_to = null,
-        public string $checker = FirewallAccessChecker::class,
-    ) {
-    }
+    public function getCurrentUser(ServerRequestInterface $request): UserWithRoles;
 }

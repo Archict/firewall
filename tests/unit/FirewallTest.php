@@ -24,6 +24,5 @@ final class FirewallTest extends TestCase
         self::assertTrue($this->service_manager->has(Firewall::class));
         $firewall = $this->service_manager->get(Firewall::class);
         self::assertInstanceOf(Firewall::class, $firewall);
-        var_dump($firewall->configuration);
     }
 }

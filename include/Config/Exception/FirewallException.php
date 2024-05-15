@@ -25,26 +25,10 @@
 
 declare(strict_types=1);
 
-namespace Archict\Firewall\Config;
+namespace Archict\Firewall\Config\Exception;
 
-use Archict\Firewall\FirewallAccessChecker;
+use Exception;
 
-/**
- * @internal
- */
-final readonly class AccessControlRepresentation
+abstract class FirewallException extends Exception
 {
-    /**
-     * @param string[]|null $roles
-     * @param class-string $checker
-     */
-    public function __construct(
-        public string $path,
-        public ?string $provider = null,
-        public ?array $roles = null,
-        public ?int $error = null,
-        public ?string $redirect_to = null,
-        public string $checker = FirewallAccessChecker::class,
-    ) {
-    }
 }

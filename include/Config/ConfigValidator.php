@@ -27,24 +27,30 @@ declare(strict_types=1);
 
 namespace Archict\Firewall\Config;
 
-use Archict\Firewall\FirewallAccessChecker;
+use Archict\Firewall\Config\Exception\FirewallException;
 
 /**
  * @internal
  */
-final readonly class AccessControlRepresentation
+final readonly class ConfigValidator
 {
-    /**
-     * @param string[]|null $roles
-     * @param class-string $checker
-     */
     public function __construct(
-        public string $path,
-        public ?string $provider = null,
-        public ?array $roles = null,
-        public ?int $error = null,
-        public ?string $redirect_to = null,
-        public string $checker = FirewallAccessChecker::class,
+        private ProviderValidator $provider_validator,
+        private AccessControlValidator $access_control_validator,
     ) {
+    }
+
+    /**
+     * @throws FirewallException
+     */
+    public function validate(FirewallConfiguration $configuration): void
+    {
+        foreach ($configuration->providers as $name => $class_name) {
+            $this->provider_validator->validate($name, $class_name);
+        }
+
+        foreach ($configuration->access_control as $representation) {
+            $this->access_control_validator->validate($representation, $configuration->providers);
+        }
     }
 }
