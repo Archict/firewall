@@ -35,6 +35,7 @@ use Archict\Firewall\FirewallAccessChecker;
 final readonly class AccessControlRepresentation
 {
     /**
+     * @param class-string|null $provider
      * @param string[]|null $roles
      * @param class-string $checker
      */
