@@ -27,28 +27,12 @@ declare(strict_types=1);
 
 namespace Archict\Firewall;
 
-final readonly class UserWithRolesStub implements UserWithRoles
+use GuzzleHttp\Psr7\ServerRequest;
+
+final class NullRequest extends ServerRequest
 {
-    /**
-     * @param string[] $roles
-     */
-    private function __construct(
-        private array $roles,
-    ) {
-    }
-
-    public static function buildWithRoles(string ...$roles): self
+    public function __construct()
     {
-        return new self($roles);
-    }
-
-    public static function buildWithoutRole(): self
-    {
-        return new self([]);
-    }
-
-    public function getRoles(): array
-    {
-        return $this->roles;
+        parent::__construct('GET', '/path');
     }
 }

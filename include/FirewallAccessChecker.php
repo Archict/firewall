@@ -32,10 +32,27 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * @internal
  */
-final class FirewallAccessChecker implements UserAccessChecker
+final readonly class FirewallAccessChecker implements UserAccessChecker
 {
+    /**
+     * @param string[] $allowed_roles
+     */
+    public function __construct(
+        private UserProvider $provider,
+        private array $allowed_roles,
+    ) {
+    }
+
     public function canUserAccessResource(ServerRequestInterface $request): bool
     {
-        return true;
+        $user = $this->provider->getCurrentUser($request);
+
+        foreach ($user->getRoles() as $role) {
+            if (in_array($role, $this->allowed_roles)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

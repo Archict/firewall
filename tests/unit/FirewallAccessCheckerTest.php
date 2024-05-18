@@ -27,28 +27,34 @@ declare(strict_types=1);
 
 namespace Archict\Firewall;
 
-final readonly class UserWithRolesStub implements UserWithRoles
+use PHPUnit\Framework\TestCase;
+
+class FirewallAccessCheckerTest extends TestCase
 {
-    /**
-     * @param string[] $roles
-     */
-    private function __construct(
-        private array $roles,
-    ) {
+    public function testItDisallowUserWithoutRole(): void
+    {
+        $checker = new FirewallAccessChecker(
+            UserProviderStub::buildWithUser(UserWithRolesStub::buildWithoutRole()),
+            ['ADMIN'],
+        );
+        self::assertFalse($checker->canUserAccessResource(new NullRequest()));
     }
 
-    public static function buildWithRoles(string ...$roles): self
+    public function testItDisallowUserWithWrongRole(): void
     {
-        return new self($roles);
+        $checker = new FirewallAccessChecker(
+            UserProviderStub::buildWithUser(UserWithRolesStub::buildWithRoles('USER', 'TEST')),
+            ['ADMIN', 'ROLE_ADMIN'],
+        );
+        self::assertFalse($checker->canUserAccessResource(new NullRequest()));
     }
 
-    public static function buildWithoutRole(): self
+    public function testItAllowUserWithRightRole(): void
     {
-        return new self([]);
-    }
-
-    public function getRoles(): array
-    {
-        return $this->roles;
+        $checker = new FirewallAccessChecker(
+            UserProviderStub::buildWithUser(UserWithRolesStub::buildWithRoles('ADMIN')),
+            ['ADMIN'],
+        );
+        self::assertTrue($checker->canUserAccessResource(new NullRequest()));
     }
 }
