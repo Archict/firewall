@@ -3,3 +3,6 @@ parameters:
   paths:
     - include
     - tests
+  ignoreErrors:
+    - identifier: argument.type
+      path: tests/unit/Config/AccessControlValidatorTest.php

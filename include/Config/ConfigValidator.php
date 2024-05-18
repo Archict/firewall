@@ -25,12 +25,32 @@
 
 declare(strict_types=1);
 
-namespace Archict\Firewall;
+namespace Archict\Firewall\Config;
 
-final class MyEvent
+use Archict\Firewall\Config\Exception\FirewallException;
+
+/**
+ * @internal
+ */
+final readonly class ConfigValidator
 {
     public function __construct(
-        public bool $has_been_called,
+        private ProviderValidator $provider_validator,
+        private AccessControlValidator $access_control_validator,
     ) {
+    }
+
+    /**
+     * @throws FirewallException
+     */
+    public function validate(FirewallConfiguration $configuration): void
+    {
+        foreach ($configuration->providers as $name => $class_name) {
+            $this->provider_validator->validate($name, $class_name);
+        }
+
+        foreach ($configuration->access_control as $representation) {
+            $this->access_control_validator->validate($representation, $configuration->providers);
+        }
     }
 }

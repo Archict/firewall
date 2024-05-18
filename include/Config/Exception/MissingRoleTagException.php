@@ -25,12 +25,12 @@
 
 declare(strict_types=1);
 
-namespace Archict\Firewall;
+namespace Archict\Firewall\Config\Exception;
 
-final readonly class MyConfiguration
+final class MissingRoleTagException extends FirewallException
 {
-    public function __construct(
-        public string $name,
-    ) {
+    public function __construct()
+    {
+        parent::__construct('You must provide tag roles if you use firewall checker');
     }
 }

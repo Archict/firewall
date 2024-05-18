@@ -13,5 +13,16 @@
                 <directory name="tests"/>
             </errorLevel>
         </PropertyNotSetInConstructor>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </UndefinedClass>
+        <ArgumentTypeCoercion>
+            <errorLevel type="suppress">
+                <file name="tests/unit/Config/AccessControlValidatorTest.php"/>
+                <file name="tests/unit/Config/ProviderValidatorTest.php"/>
+            </errorLevel>
+        </ArgumentTypeCoercion>
     </issueHandlers>
 </psalm>
