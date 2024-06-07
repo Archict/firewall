@@ -6,6 +6,7 @@ namespace Archict\Firewall;
 
 use Archict\Brick\ListeningEvent;
 use Archict\Brick\Service;
+use Archict\Core\Services\ServiceManager;
 use Archict\Firewall\Config\AccessControlRepresentation;
 use Archict\Firewall\Config\AccessControlValidator;
 use Archict\Firewall\Config\ConfigValidator;
@@ -18,8 +19,6 @@ use Archict\Router\Method;
 use Archict\Router\Middleware;
 use Archict\Router\RouteCollectorEvent;
 use Psr\Http\Message\ServerRequestInterface;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * This service doesn't need to be used outside of this Brick.
@@ -34,6 +33,7 @@ final readonly class Firewall
      */
     public function __construct(
         private FirewallConfiguration $configuration,
+        private ServiceManager $service_manager,
     ) {
         $this->validateConfiguration();
     }
@@ -51,9 +51,6 @@ final readonly class Firewall
         $validator->validate($this->configuration);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[ListeningEvent]
     public function addMiddlewares(RouteCollectorEvent $collector): void
     {
@@ -66,9 +63,6 @@ final readonly class Firewall
         }
     }
 
-    /**
-     * @throws ReflectionException
-     */
     private function createMiddlewareFromRepresentation(AccessControlRepresentation $representation): Middleware
     {
         if ($representation->checker === FirewallAccessChecker::class) {
@@ -104,24 +98,20 @@ final readonly class Firewall
 
     /**
      * @param class-string $class_name
-     * @throws ReflectionException
      */
     private function instantiateProvider(string $class_name): UserProvider
     {
-        $reflection = new ReflectionClass($class_name);
-        $instance   = $reflection->newInstance();
+        $instance = $this->service_manager->instantiateWithServices($class_name);
         assert($instance instanceof UserProvider);
         return $instance;
     }
 
     /**
      * @param class-string $class_name
-     * @throws ReflectionException
      */
     private function instantiateChecker(string $class_name): UserAccessChecker
     {
-        $reflection = new ReflectionClass($class_name);
-        $instance   = $reflection->newInstance();
+        $instance = $this->service_manager->instantiateWithServices($class_name);
         assert($instance instanceof UserAccessChecker);
         return $instance;
     }
