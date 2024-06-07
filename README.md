@@ -41,7 +41,8 @@ interface UserProvider
 }
 ```
 
-The class you pass in the config must implement this interface.
+The class you pass in the config must implement this interface. It can have dependencies like a Service, they will be
+injected during instantiation.
 
 `User` is an interface also provided by this Brick:
 
@@ -97,7 +98,8 @@ interface UserAccessChecker
 ```
 
 This method returns `true` if user is authorized to see resource. It can throw an exception the same way as defined
-in [`Archict\router`](https://github.com/Archict/router).
+in [`Archict\router`](https://github.com/Archict/router). Implementation of this interface can have some dependencies in
+its constructor, they will be injected during instantiation.
 
 Then you can provide the class name to your rule with the tag `checker`:
 
